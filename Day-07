@@ -24,4 +24,21 @@ class Solution {
     }
 }
 
-##
+## Jump Game
+
+class Solution {
+    public boolean canJump(int[] A) {
+        int jumps = 0, pos = 0, des = 0;
+        
+	for (int i = 0; i < A.length - 1; i++) {
+		des = Math.max(des, i + A[i]);
+		if (pos==i) {
+			jumps++;
+			pos = des ;
+		}
+	}
+        if(A.length-1==pos) return true;
+        else
+            return false;
+    }
+}
