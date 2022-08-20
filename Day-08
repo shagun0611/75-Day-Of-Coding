@@ -1,1 +1,21 @@
+## Maximum Area of a Piece of Cake After Horizontal and Vertical Cuts
 
+class Solution {
+    // We don't actually need to reconstruct the whole array to represent cake, we just need to find the largest gap between 2 cuts (including start and end bounderies as cuts) both horizontally and vertically, and return their product.
+
+private long getMaxDiff(int[] arr, int ei) {
+	Arrays.sort(arr);
+	int max = 0, st = 0;
+	for (int i : arr) {
+		max = Math.max(i - st, max);
+		st = i;
+	}
+	len = Math.max(len, ei - st);
+	return len;
+}
+public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {
+	long hl = getMaxDiff(horizontalCuts, h);
+	long vl = getMaxDiff(verticalCuts, w);
+	return (int)((hl * vl) % 1000000007);
+}
+}
