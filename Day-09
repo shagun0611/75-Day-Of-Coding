@@ -1,1 +1,83 @@
+## Invalid Transactions
 
+class Solution {
+    public List<String> invalidTransactions(String[] transactions) {
+        List<String> res = new ArrayList<>();
+        int n = transactions.length;
+        String[] name = new String[n];
+        int[] time = new int[n];
+        int[] amount = new int[n];
+        String[] city = new String[n];
+        boolean[] add = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            String[] t = transactions[i].split(",");
+            name[i] = t[0];
+            time[i] = Integer.valueOf(t[1]);
+            amount[i] = Integer.valueOf(t[2]);
+            city[i] = t[3];
+            if (amount[i] > 1000) {
+                add[i] = true;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (name[i].equals(name[j]) && Math.abs(time[i] - time[j]) <= 60 && !city[i].equals(city[j])) {
+                    add[i] = true;
+                    add[j] = true;
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (add[i]) {
+                res.add(transactions[i]);
+            }
+        }
+        return res;
+    } 
+}
+
+##  Jump Game
+
+class Solution {
+    public boolean canJump(int[] nums) {
+        
+    int reachable = 0;
+    for (int i=0; i<nums.length; ++i) {
+        if (i > reachable) return false;
+        reachable = Math.max(reachable, i + nums[i]); //2 4
+    }
+    return true;
+      
+    }
+}
+
+## Subarray Sums Divisible by K
+
+class Solution {
+    public int subarraysDivByK(int[] arr, int k) {
+         int result = 0;
+        
+        Map<Integer , Integer>map = new HashMap<>();
+        map.put(0 , 1);
+        
+        int sum = 0;
+        int rem = 0;
+        
+        for(int i = 0; i < arr.length; i++){
+            sum += arr[i];
+            rem = sum % k;
+            
+            if(rem < 0)
+                rem += k;
+            
+            if(map.containsKey(rem)){
+                result += map.get(rem);
+                map.put(rem , map.get(rem)+1);
+            }
+            else{
+                map.put(rem , 1);
+            }
+        }
+        return result;
+    }
+}
