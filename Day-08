@@ -40,3 +40,44 @@ class Solution {
         return 0;
     }
 }
+
+## Find All Duplicates in an Array
+
+public class Solution {
+    // when find a number i, flip the number at position i-1 to negative. 
+    // if the number at position i-1 is already negative, i is the number that occurs twice.
+    
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; ++i) {
+            int index = Math.abs(nums[i])-1;
+            if (nums[index] < 0)
+                res.add(Math.abs(index+1));
+            nums[index] = -nums[index];
+        }
+        return res;
+    }
+}
+
+## K-diff Pairs in an Array
+
+class Solution {
+    public int findPairs(int[] nums, int k) {
+	    // corner cases
+        if(nums==null || nums.length==0 || k<0) 
+            return 0;
+        
+        int count=0;
+        Map<Integer, Integer> hash=new HashMap<>();
+        
+		//frequency map
+          for(int i:nums)
+            hash.put(i, hash.getOrDefault(i, 0)+1);
+        for(Map.Entry<Integer, Integer> entry:hash.entrySet())
+		    // check if any such pair exist or not
+			//in case of k==0 check whether any number having frequency >=2 or not.
+            if((hash.containsKey(entry.getKey()+k) && k!=0) || (k==0 && entry.getValue()>1))
+                count++;
+        return count;
+    }
+}
