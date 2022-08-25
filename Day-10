@@ -1,1 +1,67 @@
+## Best Time to Buy and Sell Stock III
 
+class Solution {
+    public int maxProfit(int[] prices){
+            int cp1=Integer.MAX_VALUE,profit1=0 ;
+        int cp2=Integer.MAX_VALUE,profit2=0;
+        for(int i=0;i<prices.length;i++){
+            cp1=Math.min(cp1,prices[i]);
+            profit1=Math.max(profit1,prices[i]-cp1);
+            cp2=Math.min(cp2,prices[i]-profit1);
+            profit2=Math.max(profit2,prices[i]-cp2);
+        }
+        return profit2;
+    }
+ }
+ 
+ ## First Missing Positive
+ 
+ class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n=nums.length;
+        for(int i=0;i<n;i++){
+            if(nums[i]>0 && nums[i]<=n) //
+            {
+               int  pos=nums[i]-1;
+                if(nums[pos] != nums[i]){
+                    swap(nums,pos,i);// swap element at pos with element at i
+                    i--;
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(nums[i] != i+1)
+                return i+1;
+        }
+        return n+1;
+    }
+    private void swap(int[] nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    } 
+}
+
+## Largest Rectangle in Histogram
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        Stack < Integer > st = new Stack < > ();
+        int maxA = 0;
+        int n = heights.length;
+        for (int i = 0; i <= n; i++) {
+            while (!st.empty() && (i == n || heights[st.peek()] >= heights[i])) {
+                int h = heights[st.peek()];
+                st.pop();
+                int b;
+                if (st.empty())
+                    b = i;
+                else
+                    b = i - st.peek() - 1;
+                maxA = Math.max(maxA, b * h);
+            }
+            st.push(i);
+        }
+        return maxA;
+    }
+}
