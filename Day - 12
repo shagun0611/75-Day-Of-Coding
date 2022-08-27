@@ -1,1 +1,53 @@
+## Partition Labels
 
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        int[] last = new int[26];
+        for (int i = 0; i < S.length(); ++i)
+            last[S.charAt(i) - 'a'] = i;
+        
+        int j = 0, anchor = 0;
+        List<Integer> ans = new ArrayList();
+        for (int i = 0; i < S.length(); ++i) {
+            j = Math.max(j, last[S.charAt(i) - 'a']);
+            if (i == j) {
+                ans.add(i - anchor + 1);
+                anchor = i + 1;
+            }
+        }
+        return ans;
+    }
+}
+
+##  Sort Colors
+
+class Solution {
+    public void sortColors(int[] nums){
+        int count0=0;
+        int count1=0;
+        int count2=0;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]==0)
+                count0++;
+            if(nums[i]==1)
+                count1++;
+            if(nums[i]==2)
+                count2++;
+        }
+        for(int i=0;i<nums.length;i++){
+            if(count0!=0 && count1 >=0 && count2 >=0){
+                nums[i]=0;
+            count0--;
+            }
+           else  if(count1!=0 && count0 ==0 && count2 >=0){
+                nums[i]=1;
+            count1--;}
+          else   if(count2!=0 && count1 ==0 && count0 ==0){
+                nums[i]=2;
+            count2--;
+             }
+            
+        }
+        
+    }
+}
