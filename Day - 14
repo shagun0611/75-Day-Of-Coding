@@ -1,1 +1,70 @@
+## Count Negative Numbers in a Sorted Matrix
 
+class Solution {
+    public int countNegatives(int[][] grid){
+        int n=grid.length; //row
+            int m=grid[0].length; //column
+        int row=n-1;
+        int column=0;
+        int count=0;
+        while(row >=0 && column <m){
+            if(grid[row][column]<0){
+                count++;
+                count=count+(m-1)-column;
+                row--;
+            }
+                else if(grid[row][column] >=0){
+                column++; 
+        }
+        }
+    
+        return count;
+}
+}
+
+## Peak Index in a Mountain Array
+
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        int start = 0 ; 
+        int end  = arr.length -1 ; 
+        int ans = -1;
+        while (start <= end){
+            int mid = ( start + end) /2 ; 
+            
+            if (arr[mid] < arr [mid -1]){
+                end = mid;
+            } else if (arr[mid] < arr[mid +1]){
+                start = mid;
+            } else {
+                ans = mid;
+                break;
+            }
+        }
+        return ans ;
+    }
+}
+
+##  Time Based Key-Value Store
+
+class TimeMap {
+    HashMap<String, TreeMap<Integer, String>> hm=new HashMap<>();
+    public TimeMap() {
+        hm=new HashMap<>();
+    }
+    
+    public void set(String key, String value, int timestamp) {
+        if(!hm.containsKey(key))
+            hm.put(key, new TreeMap<>());
+        hm.get(key).put(timestamp,value);
+    }
+    
+    public String get(String key, int timestamp) {
+        if(!hm.containsKey(key)) return "";
+        var v=hm.get(key).floorKey(timestamp);
+        if(v==null) return "";
+        return hm.get(key).get(v);
+    }
+}
+
+## 
