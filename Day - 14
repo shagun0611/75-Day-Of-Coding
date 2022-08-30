@@ -67,4 +67,22 @@ class TimeMap {
     }
 }
 
-## 
+## Search in Rotated Sorted Array
+
+class Solution {
+public int search(int[] nums, int target) {
+            int index=-1;
+            int low=0, high=nums.length-1;
+         while(low<=high){
+            if(nums[low]==target){
+              return low;
+               }
+            if(nums[high]==target){
+              return high;
+                 }
+                 low++;
+                 high--;
+            }
+     return index;
+     }
+}
