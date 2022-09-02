@@ -1,1 +1,101 @@
+##  Delete Node in a Linked List
 
+class Solution {
+    public void deleteNode(ListNode node) {
+        ListNode nextNode = node.next;
+        node.val = nextNode.val;
+        node.next = nextNode.next;
+        nextNode.next = null;
+    }
+}
+
+##  Add Two Numbers II
+
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode rev1=reverse(l1);
+        ListNode rev2=reverse(l2);
+        int carry=0;
+        ListNode dummy=new ListNode();
+        ListNode temp=dummy;
+        while(rev1!=null || rev2!=null || carry==1){
+            int sum=0;
+            if(rev1!=null){
+                sum+=rev1.val;
+                rev1=rev1.next;
+            }
+            if(rev2!=null){
+                sum+=rev2.val;
+                rev2=rev2.next;
+            }
+            sum=sum+carry;
+            carry=sum/10;
+            ListNode node=new ListNode(sum%10);
+            temp.next=node;
+            temp=temp.next;
+        }
+        ListNode ans=reverse(dummy.next);
+        return ans;
+    }
+    ListNode reverse(ListNode head){
+        ListNode pres=head;
+        ListNode prev=null;
+        ListNode next=pres.next;
+        while(pres!=null){
+            pres.next=prev;
+            prev=pres;
+            pres=next;
+            if(next!=null){
+                next=next.next;
+            }
+        }
+        return prev;
+    }
+}
+
+## Intersection of Two Linked Lists
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        HashSet hs = new HashSet<>();
+
+    while(head1!=null)
+    {
+        hs.add(head1);
+        head1 = head1.next;
+    }
+    
+    while(head2!=null)
+    {
+       if(hs.contains(head2))
+       {
+           return head2;
+       }
+       head2 = head2.next;
+    }
+    
+    return null;
+        
+    }
+}
+
+##  Palindrome Linked List
+
+class Solution {
+   public boolean isPalindrome(ListNode head) {
+        ListNode temp = head;
+        Stack stack = new Stack();
+        while (temp != null) {
+            stack.push(temp.val);
+            temp = temp.next;
+        }
+        
+        while (head != null) {
+            if (head.val != (int)stack.pop()) {
+                return false;
+            }
+            head = head.next;
+        }
+        return true;
+    }
+}
