@@ -1,1 +1,201 @@
+## Verifying an Alien Dictionary
 
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        for (int i = 1; i < words.length; i++) {
+            boolean check = check(words[i - 1], words[i], order);
+            
+            if (!check) return false;
+        }
+        return true;
+    }
+    public boolean check(String s1, String s2, String s){
+        
+        int size = Math.min(s1.length(), s2.length());
+        
+        for(int i=0; i<size; i++){
+            
+            int ind1 = s.indexOf(s1.charAt(i));
+            int ind2 = s.indexOf(s2.charAt(i));
+            
+            if (ind2 < ind1)
+                return false;
+            else if (ind2 > ind1)
+                return true;
+        }
+        
+        if (s2.length()<s1.length())
+            return false;
+
+        return true;
+ 
+    }
+}
+
+##  Design HashMap
+
+class Entry{
+    public int key;
+    public int val;
+    public Entry(int key,int val){
+        this.key=key;
+        this.val=val;
+    }
+}
+class MyHashMap {
+
+    public LinkedList<Entry>[] map;
+    public int size=1000001;
+    public int hash=769;//good big prime number
+    
+    public MyHashMap() {
+        map=new LinkedList[size];
+    }
+    
+    public void put(int key, int value) {
+        int hash=key%size;
+        if(map[hash]==null){
+            map[hash]=new LinkedList<>();
+            map[hash].add(new Entry(key,value));
+        }
+        else{
+            for(Entry e:map[hash]){
+                if(e.key==key){
+                    e.val=value;
+                    return;
+                }
+            }
+            map[hash].add(new Entry(key,value));
+        }
+    }
+    
+    public int get(int key) {
+        int hash=key%size;
+        LinkedList<Entry> list=map[hash];
+        if(list==null){
+            return -1;
+        }
+        for(Entry e:list){
+            if(e.key==key){
+                return e.val;
+            }
+        }
+        return -1;
+    }
+    
+    public void remove(int key) {
+        int hash=key%size;
+        Entry toDelete=null;
+        if(map[hash]==null){
+            return;
+        }
+        for(Entry e:map[hash]){
+            if(e.key==key){
+                toDelete=e;
+            }
+        }
+        if(toDelete==null){
+            return;
+        }
+        map[hash].remove(toDelete);
+    }
+}
+
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap obj = new MyHashMap();
+ * obj.put(key,value);
+ * int param_2 = obj.get(key);
+ * obj.remove(key);
+ */
+ 
+ ## Top K Frequent Elements
+ 
+ class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        for(int num : nums)
+            map.put(num, map.getOrDefault(num,0)+1);
+        List<Integer> list = new ArrayList<>(map.keySet());
+        Collections.sort(list,(a,b) -> map.get(b)-map.get(a)); 
+        int[] res = new int[k];
+        for(int i=0; i<k; i++)
+            res[i] = list.get(i);
+        return res;
+    }
+}
+
+## Design Twitter
+
+class Twitter 
+{
+    class Pair
+    {
+        int tweetId;
+        int userId;
+        
+        Pair(int t,int u)
+        {
+            tweetId=t;
+            userId=u;
+        }
+    }
+    
+    ArrayList<Set<Integer>> a;
+    ArrayList<Pair> time;
+    
+    public Twitter() 
+    {
+        a=new ArrayList<>();
+        
+        for(int i=0;i<501;i++)
+        a.add(new HashSet<>());
+        
+        time=new ArrayList<>();
+    }
+    
+    public void postTweet(int userId, int tweetId) 
+    {
+        time.add(new Pair(tweetId,userId));
+    }
+    
+    public List<Integer> getNewsFeed(int userId) 
+    {
+        List<Integer> ans=new ArrayList<>();
+        
+        int i=time.size()-1;
+        Set<Integer> follow =a.get(userId);
+        
+        while(ans.size()<10 && i>=0)
+        {
+            Pair curr=time.get(i);
+            
+            if(follow.contains(curr.userId) || curr.userId==userId)
+            ans.add(curr.tweetId);
+            
+            i--;
+        }
+        
+        return ans;
+    }
+    
+    public void follow(int followerId, int followeeId) 
+    {
+        a.get(followerId).add(followeeId);
+    }
+    
+    public void unfollow(int followerId, int followeeId) 
+    {
+        a.get(followerId).remove(followeeId);
+    }
+}
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter obj = new Twitter();
+ * obj.postTweet(userId,tweetId);
+ * List<Integer> param_2 = obj.getNewsFeed(userId);
+ * obj.follow(followerId,followeeId);
+ * obj.unfollow(followerId,followeeId);
+ */
