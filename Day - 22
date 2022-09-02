@@ -1,1 +1,91 @@
+## Reverse Nodes in k-Group
 
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        int count=0;
+        ListNode tmp=null;
+        ListNode prv=null;
+        ListNode cur=head;
+        while(count<k && cur!=null){
+            tmp=cur.next;
+            cur.next=prv;
+            prv=cur;
+            cur=tmp;
+            count++;
+        }
+        if(count<k){      //To reverse the reversed group ,if the count doesn't reach upto k
+            cur=prv;
+            prv=null;
+            tmp=null;
+            while(count-->0){
+                tmp=cur.next;
+                cur.next=prv;
+                prv=cur;
+                cur=tmp;
+            }
+        }
+        if(tmp!=null){
+            head.next=reverseKGroup(tmp,k);
+        }
+        
+        return prv;
+        
+    }
+}
+
+## Linked List Cycle II
+
+public class Solution { 
+public ListNode detectCycle(ListNode head) 
+    {
+        if(head==null)
+            return null;
+        ListNode slow=head,fast=head;
+        int flag=0;
+        while(fast.next!=null&&fast.next.next!=null)
+        {
+            slow=slow.next;
+            fast=fast.next.next;
+            if(slow==fast)
+            {
+                flag=1;//there was a cycle
+                break;
+            }
+            
+        }
+        if(flag==0)//there is no cycle
+            return null;
+        ListNode t=head;
+        while(t!=slow)
+        {
+            t=t.next;
+            slow=slow.next;
+        }
+        return t;
+    }
+}
+
+## Rotate List
+
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head==null || head.next==null) return head;
+            ListNode cur=head;
+            int n=1;
+                while(cur.next!=null){
+                    cur=cur.next;
+                    n++;
+                        }
+                k=k%n;
+                cur.next=head;
+            ListNode temp=head;
+                n-=k;
+            while(n>1){
+                temp=temp.next;
+                    n--;
+                    }
+                cur=temp.next;
+                temp.next=null;
+                return cur;
+        }
+}
