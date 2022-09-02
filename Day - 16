@@ -31,4 +31,111 @@ class Solution {
        }
 }
 
-## 
+## Capacity To Ship Packages Within D Days
+
+class Solution {
+   public boolean isPossible(int arr[], int limit, int days){
+        int count = 1;
+        int sum = 0;
+        for(int i=0;i<arr.length;i++){
+            if(sum + arr[i]>limit){
+                sum = arr[i];
+                count++;
+            }else{
+                sum += arr[i];
+            }
+        }
+        return count<=days;
+    }
+    public int shipWithinDays(int[] weights, int days) {
+        
+        int start = weights[0], end = 0;
+        int n = weights.length;
+        for(int i=0;i<n;i++){
+            end += weights[i];
+            start = Math.max(weights[i],start);
+        }
+        int ans = end;
+        while(start<=end){
+            int mid = start + (end - start)/2;
+            if(isPossible(weights,mid,days)){
+                ans = mid;
+                end = mid - 1;
+            }
+            else{
+                start = mid + 1;
+            }
+        }
+        return ans;
+        
+    }
+}
+
+## Minimum Limit of Balls in a Bag
+
+class Solution {
+    public int minimumSize(int[] nums, int maxOperations) {
+        int lams = 1;           //lowest Allowed Max Size of Bag
+        int hams = 0;           //highest Allowed Max Size of Bag
+        for(int num : nums){
+            hams = Math.max(hams,num);
+        }
+        
+        while(lams < hams){
+            int mid = (lams + hams)/2;
+            int ams = mid;              //Allowed size :Assumption
+            
+            int opReq = 0;
+            for(int ball : nums){
+                if(ball > ams){
+                    int spare = ball - ams;
+                    int op = (spare + ams - 1)/ams;     //Ceil
+                    opReq += op;
+                }
+            }
+            
+            if(opReq > maxOperations){
+                lams = mid + 1;
+            }else{
+                hams = mid;
+            }
+            
+        }
+        return lams;
+    }
+}
+
+## Median of Two Sorted Arrays
+
+import java.util.ArrayList;
+import java.util.Arrays;
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        double n1 = nums1.length;
+        double n2 = nums2.length;
+        ArrayList<Integer> al = new ArrayList<Integer>();
+        for(int i =0;i<n1;i++){
+            al.add(nums1[i]) ;
+        }
+        for(int i =0;i<n2;i++){
+            al.add(nums2[i]);    
+        }
+        // creating merged array
+        int n= al.size();
+        double[] arr = new double[n];
+        for(int i =0;i<n;i++){
+            arr[i]=al.get(i);
+        }
+        Arrays.sort(arr);
+        // getting the median of element in the array
+        double avg = 0;
+        if(n%2==0){
+           avg = (arr[n/2]+arr[(n/2)-1])/2;
+        }
+        else{
+            avg = arr[n/2];
+        }
+        return avg;
+    
+    }
+}
