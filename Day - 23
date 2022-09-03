@@ -1,0 +1,97 @@
+## Flatten a Multilevel Doubly Linked List
+
+class Solution {
+    public Node flatten(Node head) {
+        Node res = flat(head);
+        return head;
+    }
+    public Node flat(Node head){
+        if(head == null)
+            return null;
+        Node prev = head;
+        while(head!=null){
+            if(head.child != null){
+                Node last = flat(head.child);
+                Node temp = head.next;
+                head.next = head.child;
+                head.child.prev = head;
+                if(temp!=null){
+                    last.next = temp;
+                    temp.prev = last;   
+                }
+                head.child = null;
+                head = last;
+            }
+            prev = head;
+            head = head.next;
+        }
+        return prev;
+    }
+}
+
+## Copy List with Random Pointer
+
+public Node copyRandomList(Node head) {
+        if(head==null)
+            return head;
+        
+        Node newHead = null;
+        Node temp = head;
+        
+        while(temp!=null){
+            Node extra = temp.next;
+            Node newNode = new Node(temp.val);
+            if(temp==head){
+                newHead = newNode;
+            }
+            temp.next = newNode;
+            newNode.next = extra;
+            temp = extra;
+        }
+         // A --> A' --> B --> B' --> C --> C' --> D --> D'
+        temp = head;
+        while(temp!=null){
+            if(temp.random!=null){
+                temp.next.random = temp.random.next;
+            }
+            temp = temp.next.next;
+        }
+        temp = head;
+        
+        Node cur = head;
+        Node head_cp = head.next;
+        Node cur_cp = null;
+        while (cur != null)
+        {
+            cur_cp = cur.next;
+            cur.next = cur_cp.next;
+            cur = cur.next;
+            if (cur!=null)
+                cur_cp.next = cur.next;
+        }
+        
+        
+        return head_cp;
+        
+    }
+    
+    ## Find the Duplicate Number
+    
+    class Solution {
+    public int findDuplicate(int[] nums) 
+    {
+        int n=nums.length;
+// 	    Hashing way
+        for (int i = 0; i < n; i++)
+            nums[nums[i] % n] = nums[nums[i] % n] + n;
+ 
+        int a=0;
+        for (int i = 0; i < n; i++){ 
+            if( nums[i] / n >1)
+            { 
+            a= i; break; }
+            
+        }
+        return a;
+    }
+}
