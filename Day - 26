@@ -66,4 +66,154 @@ class Solution {
     }
 }
 
-## 
+##  LFU Cache
+
+class LFUCache {
+    
+    class Node {
+        Node next = null;
+        Node prev = null;
+        int key;
+        int value;
+        int freq = 1;
+        
+        Node(int k, int v) {
+            key = k;
+            value = v;
+        }
+    }
+    
+    Node head;
+    public int size = 0;
+    public int capacity = 0;
+    HashMap<Integer, Node> keyNodes = new HashMap<>();
+    HashMap<Integer, Node> firstNodes = new HashMap<>(); // key is frequency. First Nodes
+    HashMap<Integer, Node> lastNodes = new HashMap<>(); // key is frequency. Last Nodes
+
+    
+    public LFUCache(int cap) {
+        capacity = cap;
+    }
+    
+    public int get(int key) {
+        Node node = detach(key);
+        if (node == null) {
+            return -1;
+        }
+        node.freq++;
+        attach(node);        
+        return node.value;
+    }
+    
+    
+    public void put(int key, int value) {
+        if (capacity == 0) {
+            return;
+        }
+        Node node = detach(key);
+        if (node == null) {
+            if (size == capacity) {
+                detach(head.key);
+            }
+            node = new Node(key, value);
+        } else {
+            node.value = value;
+            node.freq++;
+        }
+        attach(node);
+    }
+    
+    /**
+    * Attaches node to the structure
+    **/
+    private void attach(Node node) {
+
+        size++;
+        keyNodes.put(node.key, node);
+        if (size == 1) {
+            node.next = null;
+            node.prev = null;
+            head = node;
+            firstNodes.put(node.freq, node);
+            lastNodes.put(node.freq, node);
+            return;
+        }
+        
+        if (node.freq < head.freq) {
+            node.prev = null;
+            node.next = head;
+            head.prev = node;
+            head = node;
+            firstNodes.put(node.freq, node);
+            lastNodes.put(node.freq, node);
+            return;
+        }
+        
+        if (firstNodes.containsKey(node.freq)) {
+            node.next = lastNodes.get(node.freq).next;
+            if (node.next != null) {
+                node.next.prev = node;    
+            }
+            node.prev = lastNodes.get(node.freq);
+            lastNodes.get(node.freq).next = node;
+            lastNodes.put(node.freq, node);
+        } else {
+            int preFreq = node.freq - 1;
+            if (lastNodes.containsKey(preFreq)) {
+                node.next = lastNodes.get(preFreq).next;    
+                if (node.next != null) {
+                    node.next.prev = node;    
+                }
+                
+                lastNodes.get(preFreq).next = node;
+                node.prev = lastNodes.get(preFreq);
+            } else {
+                // otherwise it was the only node with previous frequency
+                // and it still should have proper connections to prev and next
+                node.prev.next = node;
+                if (node.next != null) {
+                    node.next.prev = node;
+                }
+            }
+            
+            firstNodes.put(node.freq, node);
+            lastNodes.put(node.freq, node);
+        }
+    }
+    
+    /**
+    * Detaches node from the structure
+    **/
+    private Node detach(int key) {
+        
+        if ( ! keyNodes.containsKey(key)) {
+            return null;
+        }
+        
+        Node node = keyNodes.get(key);
+        
+        if (head == node) {
+            head = node.next;
+        }
+        
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        }
+        if (node.prev != null) {
+            node.prev.next = node.next;
+        }
+        
+        if ((firstNodes.get(node.freq) == lastNodes.get(node.freq)) && (firstNodes.get(node.freq) == node)) {
+            firstNodes.remove(node.freq);
+            lastNodes.remove(node.freq);
+        } else if (firstNodes.get(node.freq) == node) {
+            firstNodes.put(node.freq, node.next);
+        } else if (lastNodes.get(node.freq) == node) {
+            lastNodes.put(node.freq, node.prev);
+        }
+            
+        size--;
+        keyNodes.remove(key);   
+        return node;
+    }   
+}
