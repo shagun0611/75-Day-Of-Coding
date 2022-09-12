@@ -1,0 +1,94 @@
+## Sum of Left Leaves
+
+class Solution {
+    int ans = 0;
+    public int sumOfLeftLeaves(TreeNode root) {
+        helper(root);
+        return ans;
+    }
+    public void helper(TreeNode root){
+        // if root itself is a null the return 
+        if(root == null) return;
+        // if left is not null and left is leaf then add in ans
+        if(root.left != null && root.left.left == null && root.left.right == null){
+            ans += root.left.val;
+        }
+        // preOrder manner
+        helper(root.left);
+        helper(root.right);
+    }
+}
+
+## Balanced Binary Tree
+
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+       int ans=bal(root);
+        if(ans == -1)
+            return false;
+        else
+            return true;
+        
+    }
+    public int bal(TreeNode root){
+         if(root==null)
+            return 0;
+        int lh=bal(root.left);
+        if(lh==-1)return -1;
+        int rh=bal(root.right);
+        if (rh==-1) return -1;
+        if(Math.abs(lh-rh)>1) return -1;
+        return 1+Math.max(lh,rh);
+        
+    }
+}
+
+## Maximum Width of Binary Tree
+
+class Solution {
+    int maxWidth;
+    public int widthOfBinaryTree(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        if(root.left == null && root.right == null){
+            return 1;
+        }
+        maxWidth = 1;
+        findWidth(root, 0, 1, new HashMap<Integer, Integer>());
+        return maxWidth;
+    }
+    
+	//HashMap stores the first node number in a level
+	//we update the maxWidth for all the nodes after second node in a given level
+    private void findWidth(TreeNode root, int level, int nodeNum, Map<Integer, Integer> levelWidth){
+        if(root == null){
+            return;
+        }
+        if(!levelWidth.containsKey(level))
+            levelWidth.put(level, nodeNum);
+        else
+            maxWidth = Math.max(maxWidth, nodeNum - levelWidth.get(level)+1);
+        findWidth(root.left, level+1, 2*nodeNum, levelWidth);
+        findWidth(root.right, level+1, 2*nodeNum+1, levelWidth);
+    }
+}
+
+##  Count Good Nodes in Binary Tree
+
+class Solution {
+    int count = 0; 
+    public int goodNodes(TreeNode root) {
+        helper(root, root.val);
+        return count; 
+    }
+    private void helper(TreeNode root, int max) {
+        if (root != null) {
+            if (root.val >= max) { 
+                count++;
+            }
+            helper(root.left, Math.max(root.val, max));  
+            helper(root.right, Math.max(root.val, max));
+        }
+    }
+}
