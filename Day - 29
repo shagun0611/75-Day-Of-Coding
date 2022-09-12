@@ -1,1 +1,81 @@
-## 
+##  Same Tree
+
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p==null || q==null)
+            return p==q;
+        
+        return(p.val==q.val)&& isSameTree(p.left,q.left) && isSameTree(p.right,q.right);
+        
+    }
+}
+
+## Lowest Common Ancestor of a Binary Search Tree
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+         if(root.val > p.val && root.val > q.val){
+            return lowestCommonAncestor(root.left, p, q);
+        }else if(root.val < p.val && root.val < q.val){
+            return lowestCommonAncestor(root.right, p, q);
+        }else{
+            return root;
+        }
+        
+    }
+}
+
+## Path Sum
+
+class Solution {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if ( root == null) {
+            return false;
+        }
+        if ( root.left == null && root.right == null) {
+            return root.val == targetSum;
+        } 
+        
+        targetSum -= root.val;
+        
+        return hasPathSum( root.left, targetSum) || hasPathSum( root.right, targetSum);        
+    }
+}
+
+##  Minimum Absolute Difference in BST
+
+class Solution {
+    public int getMinimumDifference(TreeNode root) {
+        Integer prev = null;
+        TreeNode curr = root;
+        int minDiff = Integer.MAX_VALUE;
+        while (curr != null) {
+            if (curr.left == null) {
+                if (prev != null) {
+                    minDiff = Math.min(minDiff, curr.val-prev);
+                }
+                prev = curr.val;
+                curr = curr.right;
+            }
+            else {
+                TreeNode predecessor = curr.left;
+                while (predecessor.right != null && predecessor.right != curr) {
+                    predecessor = predecessor.right;
+                }
+                if (predecessor.right == null) {
+                    predecessor.right = curr;
+                    curr = curr.left;
+                }
+                else {
+                    predecessor.right = curr;
+                    if (prev != null) {
+                        minDiff = Math.min(minDiff, curr.val - prev);
+                    }
+                    prev = curr.val;
+                    curr = curr.right;
+                }
+            }
+        }
+        return minDiff;
+    }
+}
